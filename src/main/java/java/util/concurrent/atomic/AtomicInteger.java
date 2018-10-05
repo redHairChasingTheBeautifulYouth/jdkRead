@@ -38,26 +38,22 @@ import java.util.function.IntUnaryOperator;
 import java.util.function.IntBinaryOperator;
 import sun.misc.Unsafe;
 
-/**
- * An {@code int} value that may be updated atomically.  See the
- * {@link java.util.concurrent.atomic} package specification for
- * description of the properties of atomic variables. An
- * {@code AtomicInteger} is used in applications such as atomically
- * incremented counters, and cannot be used as a replacement for an
- * {@link java.lang.Integer}. However, this class does extend
- * {@code Number} to allow uniform access by tools and utilities that
- * deal with numerically-based classes.
- *
- * @since 1.5
- * @author Doug Lea
-*/
 public class AtomicInteger extends Number implements java.io.Serializable {
     private static final long serialVersionUID = 6214790243416807050L;
 
-    // setup to use Unsafe.compareAndSwapInt for updates
+    /**
+     * 操作指针类
+     */
     private static final Unsafe unsafe = Unsafe.getUnsafe();
+
+    /**
+     * 偏移量
+     */
     private static final long valueOffset;
 
+    /**
+     * 初始化偏移量
+     */
     static {
         try {
             valueOffset = unsafe.objectFieldOffset
@@ -68,9 +64,8 @@ public class AtomicInteger extends Number implements java.io.Serializable {
     private volatile int value;
 
     /**
-     * Creates a new AtomicInteger with the given initial value.
-     *
-     * @param initialValue the initial value
+     * value初始化偏移量
+     * @param initialValue
      */
     public AtomicInteger(int initialValue) {
         value = initialValue;
@@ -83,9 +78,8 @@ public class AtomicInteger extends Number implements java.io.Serializable {
     }
 
     /**
-     * Gets the current value.
-     *
-     * @return the current value
+     * 得到当前值
+     * @return
      */
     public final int get() {
         return value;
@@ -150,18 +144,16 @@ public class AtomicInteger extends Number implements java.io.Serializable {
     }
 
     /**
-     * Atomically increments by one the current value.
-     *
-     * @return the previous value
+     * 当前值加一是否是预期值，是就加一
+     * @return
      */
     public final int getAndIncrement() {
         return unsafe.getAndAddInt(this, valueOffset, 1);
     }
 
     /**
-     * Atomically decrements by one the current value.
-     *
-     * @return the previous value
+     * 当前值减一是否是预期值，是就减一
+     * @return
      */
     public final int getAndDecrement() {
         return unsafe.getAndAddInt(this, valueOffset, -1);
@@ -243,20 +235,6 @@ public class AtomicInteger extends Number implements java.io.Serializable {
         return next;
     }
 
-    /**
-     * Atomically updates the current value with the results of
-     * applying the given function to the current and given values,
-     * returning the previous value. The function should be
-     * side-effect-free, since it may be re-applied when attempted
-     * updates fail due to contention among threads.  The function
-     * is applied with the current value as its first argument,
-     * and the given update as the second argument.
-     *
-     * @param x the update value
-     * @param accumulatorFunction a side-effect-free function of two arguments
-     * @return the previous value
-     * @since 1.8
-     */
     public final int getAndAccumulate(int x,
                                       IntBinaryOperator accumulatorFunction) {
         int prev, next;

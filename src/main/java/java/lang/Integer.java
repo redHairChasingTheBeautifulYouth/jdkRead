@@ -1,64 +1,18 @@
-/*
- * Copyright (c) 1994, 2013, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
+
 
 package java.lang;
 
 import java.lang.annotation.Native;
 
-/**
- * The {@code Integer} class wraps a value of the primitive type
- * {@code int} in an object. An object of type {@code Integer}
- * contains a single field whose type is {@code int}.
- *
- * <p>In addition, this class provides several methods for converting
- * an {@code int} to a {@code String} and a {@code String} to an
- * {@code int}, as well as other constants and methods useful when
- * dealing with an {@code int}.
- *
- * <p>Implementation note: The implementations of the "bit twiddling"
- * methods (such as {@link #highestOneBit(int) highestOneBit} and
- * {@link #numberOfTrailingZeros(int) numberOfTrailingZeros}) are
- * based on material from Henry S. Warren, Jr.'s <i>Hacker's
- * Delight</i>, (Addison Wesley, 2002).
- *
- * @author  Lee Boynton
- * @author  Arthur van Hoff
- * @author  Josh Bloch
- * @author  Joseph D. Darcy
- * @since JDK1.0
- */
 public final class Integer extends Number implements Comparable<Integer> {
+
     /**
-     * A constant holding the minimum value an {@code int} can
-     * have, -2<sup>31</sup>.
+     * 最小值
      */
     @Native public static final int   MIN_VALUE = 0x80000000;
 
     /**
-     * A constant holding the maximum value an {@code int} can
-     * have, 2<sup>31</sup>-1.
+     * 最大值
      */
     @Native public static final int   MAX_VALUE = 0x7fffffff;
 
@@ -83,50 +37,7 @@ public final class Integer extends Number implements Comparable<Integer> {
         'u' , 'v' , 'w' , 'x' , 'y' , 'z'
     };
 
-    /**
-     * Returns a string representation of the first argument in the
-     * radix specified by the second argument.
-     *
-     * <p>If the radix is smaller than {@code Character.MIN_RADIX}
-     * or larger than {@code Character.MAX_RADIX}, then the radix
-     * {@code 10} is used instead.
-     *
-     * <p>If the first argument is negative, the first element of the
-     * result is the ASCII minus character {@code '-'}
-     * ({@code '\u005Cu002D'}). If the first argument is not
-     * negative, no sign character appears in the result.
-     *
-     * <p>The remaining characters of the result represent the magnitude
-     * of the first argument. If the magnitude is zero, it is
-     * represented by a single zero character {@code '0'}
-     * ({@code '\u005Cu0030'}); otherwise, the first character of
-     * the representation of the magnitude will not be the zero
-     * character.  The following ASCII characters are used as digits:
-     *
-     * <blockquote>
-     *   {@code 0123456789abcdefghijklmnopqrstuvwxyz}
-     * </blockquote>
-     *
-     * These are {@code '\u005Cu0030'} through
-     * {@code '\u005Cu0039'} and {@code '\u005Cu0061'} through
-     * {@code '\u005Cu007A'}. If {@code radix} is
-     * <var>N</var>, then the first <var>N</var> of these characters
-     * are used as radix-<var>N</var> digits in the order shown. Thus,
-     * the digits for hexadecimal (radix 16) are
-     * {@code 0123456789abcdef}. If uppercase letters are
-     * desired, the {@link java.lang.String#toUpperCase()} method may
-     * be called on the result:
-     *
-     * <blockquote>
-     *  {@code Integer.toString(n, 16).toUpperCase()}
-     * </blockquote>
-     *
-     * @param   i       an integer to be converted to a string.
-     * @param   radix   the radix to use in the string representation.
-     * @return  a string representation of the argument in the specified radix.
-     * @see     java.lang.Character#MAX_RADIX
-     * @see     java.lang.Character#MIN_RADIX
-     */
+
     public static String toString(int i, int radix) {
         if (radix < Character.MIN_RADIX || radix > Character.MAX_RADIX)
             radix = 10;
@@ -157,116 +68,17 @@ public final class Integer extends Number implements Comparable<Integer> {
         return new String(buf, charPos, (33 - charPos));
     }
 
-    /**
-     * Returns a string representation of the first argument as an
-     * unsigned integer value in the radix specified by the second
-     * argument.
-     *
-     * <p>If the radix is smaller than {@code Character.MIN_RADIX}
-     * or larger than {@code Character.MAX_RADIX}, then the radix
-     * {@code 10} is used instead.
-     *
-     * <p>Note that since the first argument is treated as an unsigned
-     * value, no leading sign character is printed.
-     *
-     * <p>If the magnitude is zero, it is represented by a single zero
-     * character {@code '0'} ({@code '\u005Cu0030'}); otherwise,
-     * the first character of the representation of the magnitude will
-     * not be the zero character.
-     *
-     * <p>The behavior of radixes and the characters used as digits
-     * are the same as {@link #toString(int, int) toString}.
-     *
-     * @param   i       an integer to be converted to an unsigned string.
-     * @param   radix   the radix to use in the string representation.
-     * @return  an unsigned string representation of the argument in the specified radix.
-     * @see     #toString(int, int)
-     * @since 1.8
-     */
+
     public static String toUnsignedString(int i, int radix) {
         return Long.toUnsignedString(toUnsignedLong(i), radix);
     }
 
-    /**
-     * Returns a string representation of the integer argument as an
-     * unsigned integer in base&nbsp;16.
-     *
-     * <p>The unsigned integer value is the argument plus 2<sup>32</sup>
-     * if the argument is negative; otherwise, it is equal to the
-     * argument.  This value is converted to a string of ASCII digits
-     * in hexadecimal (base&nbsp;16) with no extra leading
-     * {@code 0}s.
-     *
-     * <p>The value of the argument can be recovered from the returned
-     * string {@code s} by calling {@link
-     * Integer#parseUnsignedInt(String, int)
-     * Integer.parseUnsignedInt(s, 16)}.
-     *
-     * <p>If the unsigned magnitude is zero, it is represented by a
-     * single zero character {@code '0'} ({@code '\u005Cu0030'});
-     * otherwise, the first character of the representation of the
-     * unsigned magnitude will not be the zero character. The
-     * following characters are used as hexadecimal digits:
-     *
-     * <blockquote>
-     *  {@code 0123456789abcdef}
-     * </blockquote>
-     *
-     * These are the characters {@code '\u005Cu0030'} through
-     * {@code '\u005Cu0039'} and {@code '\u005Cu0061'} through
-     * {@code '\u005Cu0066'}. If uppercase letters are
-     * desired, the {@link java.lang.String#toUpperCase()} method may
-     * be called on the result:
-     *
-     * <blockquote>
-     *  {@code Integer.toHexString(n).toUpperCase()}
-     * </blockquote>
-     *
-     * @param   i   an integer to be converted to a string.
-     * @return  the string representation of the unsigned integer value
-     *          represented by the argument in hexadecimal (base&nbsp;16).
-     * @see #parseUnsignedInt(String, int)
-     * @see #toUnsignedString(int, int)
-     * @since   JDK1.0.2
-     */
+
     public static String toHexString(int i) {
         return toUnsignedString0(i, 4);
     }
 
-    /**
-     * Returns a string representation of the integer argument as an
-     * unsigned integer in base&nbsp;8.
-     *
-     * <p>The unsigned integer value is the argument plus 2<sup>32</sup>
-     * if the argument is negative; otherwise, it is equal to the
-     * argument.  This value is converted to a string of ASCII digits
-     * in octal (base&nbsp;8) with no extra leading {@code 0}s.
-     *
-     * <p>The value of the argument can be recovered from the returned
-     * string {@code s} by calling {@link
-     * Integer#parseUnsignedInt(String, int)
-     * Integer.parseUnsignedInt(s, 8)}.
-     *
-     * <p>If the unsigned magnitude is zero, it is represented by a
-     * single zero character {@code '0'} ({@code '\u005Cu0030'});
-     * otherwise, the first character of the representation of the
-     * unsigned magnitude will not be the zero character. The
-     * following characters are used as octal digits:
-     *
-     * <blockquote>
-     * {@code 01234567}
-     * </blockquote>
-     *
-     * These are the characters {@code '\u005Cu0030'} through
-     * {@code '\u005Cu0037'}.
-     *
-     * @param   i   an integer to be converted to a string.
-     * @return  the string representation of the unsigned integer value
-     *          represented by the argument in octal (base&nbsp;8).
-     * @see #parseUnsignedInt(String, int)
-     * @see #toUnsignedString(int, int)
-     * @since   JDK1.0.2
-     */
+
     public static String toOctalString(int i) {
         return toUnsignedString0(i, 3);
     }
@@ -474,61 +286,7 @@ public final class Integer extends Number implements Comparable<Integer> {
                 return i+1;
     }
 
-    /**
-     * Parses the string argument as a signed integer in the radix
-     * specified by the second argument. The characters in the string
-     * must all be digits of the specified radix (as determined by
-     * whether {@link java.lang.Character#digit(char, int)} returns a
-     * nonnegative value), except that the first character may be an
-     * ASCII minus sign {@code '-'} ({@code '\u005Cu002D'}) to
-     * indicate a negative value or an ASCII plus sign {@code '+'}
-     * ({@code '\u005Cu002B'}) to indicate a positive value. The
-     * resulting integer value is returned.
-     *
-     * <p>An exception of type {@code NumberFormatException} is
-     * thrown if any of the following situations occurs:
-     * <ul>
-     * <li>The first argument is {@code null} or is a string of
-     * length zero.
-     *
-     * <li>The radix is either smaller than
-     * {@link java.lang.Character#MIN_RADIX} or
-     * larger than {@link java.lang.Character#MAX_RADIX}.
-     *
-     * <li>Any character of the string is not a digit of the specified
-     * radix, except that the first character may be a minus sign
-     * {@code '-'} ({@code '\u005Cu002D'}) or plus sign
-     * {@code '+'} ({@code '\u005Cu002B'}) provided that the
-     * string is longer than length 1.
-     *
-     * <li>The value represented by the string is not a value of type
-     * {@code int}.
-     * </ul>
-     *
-     * <p>Examples:
-     * <blockquote><pre>
-     * parseInt("0", 10) returns 0
-     * parseInt("473", 10) returns 473
-     * parseInt("+42", 10) returns 42
-     * parseInt("-0", 10) returns 0
-     * parseInt("-FF", 16) returns -255
-     * parseInt("1100110", 2) returns 102
-     * parseInt("2147483647", 10) returns 2147483647
-     * parseInt("-2147483648", 10) returns -2147483648
-     * parseInt("2147483648", 10) throws a NumberFormatException
-     * parseInt("99", 8) throws a NumberFormatException
-     * parseInt("Kona", 10) throws a NumberFormatException
-     * parseInt("Kona", 27) returns 411787
-     * </pre></blockquote>
-     *
-     * @param      s   the {@code String} containing the integer
-     *                  representation to be parsed
-     * @param      radix   the radix to be used while parsing {@code s}.
-     * @return     the integer represented by the string argument in the
-     *             specified radix.
-     * @exception  NumberFormatException if the {@code String}
-     *             does not contain a parsable {@code int}.
-     */
+
     public static int parseInt(String s, int radix)
                 throws NumberFormatException
     {
@@ -977,124 +735,18 @@ public final class Integer extends Number implements Comparable<Integer> {
         return false;
     }
 
-    /**
-     * Determines the integer value of the system property with the
-     * specified name.
-     *
-     * <p>The first argument is treated as the name of a system
-     * property.  System properties are accessible through the {@link
-     * java.lang.System#getProperty(java.lang.String)} method. The
-     * string value of this property is then interpreted as an integer
-     * value using the grammar supported by {@link Integer#decode decode} and
-     * an {@code Integer} object representing this value is returned.
-     *
-     * <p>If there is no property with the specified name, if the
-     * specified name is empty or {@code null}, or if the property
-     * does not have the correct numeric format, then {@code null} is
-     * returned.
-     *
-     * <p>In other words, this method returns an {@code Integer}
-     * object equal to the value of:
-     *
-     * <blockquote>
-     *  {@code getInteger(nm, null)}
-     * </blockquote>
-     *
-     * @param   nm   property name.
-     * @return  the {@code Integer} value of the property.
-     * @throws  SecurityException for the same reasons as
-     *          {@link System#getProperty(String) System.getProperty}
-     * @see     java.lang.System#getProperty(java.lang.String)
-     * @see     java.lang.System#getProperty(java.lang.String, java.lang.String)
-     */
+
     public static Integer getInteger(String nm) {
         return getInteger(nm, null);
     }
 
-    /**
-     * Determines the integer value of the system property with the
-     * specified name.
-     *
-     * <p>The first argument is treated as the name of a system
-     * property.  System properties are accessible through the {@link
-     * java.lang.System#getProperty(java.lang.String)} method. The
-     * string value of this property is then interpreted as an integer
-     * value using the grammar supported by {@link Integer#decode decode} and
-     * an {@code Integer} object representing this value is returned.
-     *
-     * <p>The second argument is the default value. An {@code Integer} object
-     * that represents the value of the second argument is returned if there
-     * is no property of the specified name, if the property does not have
-     * the correct numeric format, or if the specified name is empty or
-     * {@code null}.
-     *
-     * <p>In other words, this method returns an {@code Integer} object
-     * equal to the value of:
-     *
-     * <blockquote>
-     *  {@code getInteger(nm, new Integer(val))}
-     * </blockquote>
-     *
-     * but in practice it may be implemented in a manner such as:
-     *
-     * <blockquote><pre>
-     * Integer result = getInteger(nm, null);
-     * return (result == null) ? new Integer(val) : result;
-     * </pre></blockquote>
-     *
-     * to avoid the unnecessary allocation of an {@code Integer}
-     * object when the default value is not needed.
-     *
-     * @param   nm   property name.
-     * @param   val   default value.
-     * @return  the {@code Integer} value of the property.
-     * @throws  SecurityException for the same reasons as
-     *          {@link System#getProperty(String) System.getProperty}
-     * @see     java.lang.System#getProperty(java.lang.String)
-     * @see     java.lang.System#getProperty(java.lang.String, java.lang.String)
-     */
+
     public static Integer getInteger(String nm, int val) {
         Integer result = getInteger(nm, null);
         return (result == null) ? Integer.valueOf(val) : result;
     }
 
-    /**
-     * Returns the integer value of the system property with the
-     * specified name.  The first argument is treated as the name of a
-     * system property.  System properties are accessible through the
-     * {@link java.lang.System#getProperty(java.lang.String)} method.
-     * The string value of this property is then interpreted as an
-     * integer value, as per the {@link Integer#decode decode} method,
-     * and an {@code Integer} object representing this value is
-     * returned; in summary:
-     *
-     * <ul><li>If the property value begins with the two ASCII characters
-     *         {@code 0x} or the ASCII character {@code #}, not
-     *      followed by a minus sign, then the rest of it is parsed as a
-     *      hexadecimal integer exactly as by the method
-     *      {@link #valueOf(java.lang.String, int)} with radix 16.
-     * <li>If the property value begins with the ASCII character
-     *     {@code 0} followed by another character, it is parsed as an
-     *     octal integer exactly as by the method
-     *     {@link #valueOf(java.lang.String, int)} with radix 8.
-     * <li>Otherwise, the property value is parsed as a decimal integer
-     * exactly as by the method {@link #valueOf(java.lang.String, int)}
-     * with radix 10.
-     * </ul>
-     *
-     * <p>The second argument is the default value. The default value is
-     * returned if there is no property of the specified name, if the
-     * property does not have the correct numeric format, or if the
-     * specified name is empty or {@code null}.
-     *
-     * @param   nm   property name.
-     * @param   val   default value.
-     * @return  the {@code Integer} value of the property.
-     * @throws  SecurityException for the same reasons as
-     *          {@link System#getProperty(String) System.getProperty}
-     * @see     System#getProperty(java.lang.String)
-     * @see     System#getProperty(java.lang.String, java.lang.String)
-     */
+
     public static Integer getInteger(String nm, Integer val) {
         String v = null;
         try {
