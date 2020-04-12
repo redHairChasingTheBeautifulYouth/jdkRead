@@ -158,6 +158,7 @@ public class ThreadLocal<T> {
      */
     public T get() {
         Thread t = Thread.currentThread();
+        //得到当前线程map
         ThreadLocalMap map = getMap(t);
         if (map != null) {
             ThreadLocalMap.Entry e = map.getEntry(this);
@@ -199,9 +200,12 @@ public class ThreadLocal<T> {
     public void set(T value) {
         Thread t = Thread.currentThread();
         ThreadLocalMap map = getMap(t);
+        //未初始化
         if (map != null)
+            //当前线程持有的map将本次的ThreadLocal对象作为key，要设置的值作为value设置进当前线程持有的map中
             map.set(this, value);
         else
+            //初始化并设置值
             createMap(t, value);
     }
 
